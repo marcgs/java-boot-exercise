@@ -1,10 +1,13 @@
 package com.exercise.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 public class MeasurementMedian {
 
+    @JsonIgnore
     private Long sensorId;
     private BigDecimal measurementMedianValue;
     private Timestamp measurementMedianTime;
