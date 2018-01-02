@@ -8,6 +8,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Map;
+
 import static com.exercise.generated.public_.tables.Measurement.MEASUREMENT;
 
 @Service
@@ -23,6 +28,15 @@ public class MeasurementService {
         measurementRecord.setValue(measurement.getMeasurementValue());
         measurementRecord.setTimestamp(measurement.getMeasurementTime());
         measurementRecord.store();
+    }
+
+    public Map<Long, List<BigDecimal>> getMeasurementValues(Timestamp timestampHourAgo) {
+        return create.selectFrom(MEASUREMENT)
+                .where(MEASUREMENT.TIMESTAMP.gt(timestampHourAgo))
+                .orderBy(MEASUREMENT.VALUE.asc())
+                .fetch()
+                .intoGroups(MEASUREMENT.SENSOR_ID, MEASUREMENT.VALUE)
+                ;
     }
 
 }
